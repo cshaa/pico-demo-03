@@ -18,7 +18,7 @@ add_library(st7789 st7789.c)
 target_link_libraries(st7789 hardware_gpio hardware_spi)
 
 add_executable(main main.c)
-target_link_libraries(main pico_stdlib st7789)
+target_link_libraries(main pico_stdlib hardware_vreg st7789)
 
 if(PICO_W)
   target_link_libraries(main pico_cyw43_arch_none)

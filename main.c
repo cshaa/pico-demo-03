@@ -1,6 +1,11 @@
 #include <stdio.h>
 #include "pico/stdlib.h"
+#include "hardware/vreg.h"
 #include "st7789.h"
+
+const uint32_t CPU_FREQ_KHZ = 133000;
+const uint32_t SPI_FREQ_HZ = 50 * 1000 * 1000;
+const enum vreg_voltage CPU_VOLTAGE = VREG_VOLTAGE_1_10;
 
 #ifdef PICO_W
 const uint LED_PIN = CYW43_WL_GPIO_LED_PIN;
@@ -44,12 +49,16 @@ void led_off()
 
 int main()
 {
+    vreg_set_voltage(CPU_VOLTAGE);
+    set_sys_clock_khz(CPU_FREQ_KHZ, true);
+
     stdio_init_all();
 
     led_setup();
 
     const struct st7789_config lcd_config = {
         .spi = PICO_DEFAULT_SPI_INSTANCE,
+        .freq_hz = SPI_FREQ_HZ,
         .gpio_din = PICO_DEFAULT_SPI_TX_PIN,
         .gpio_clk = PICO_DEFAULT_SPI_SCK_PIN,
         .gpio_cs = -1,
@@ -64,9 +73,15 @@ int main()
         printf("Screen ahoy! (%i)\n", time_ms() / 1000);
         led_on();
         st7789_fill(0x0000);
-        sleep_ms(500);
+        sleep_ms(200);
+        st7789_fill(0xf000);
+        sleep_ms(200);
+        st7789_fill(0x0f00);
+        sleep_ms(200);
         led_off();
+        st7789_fill(0x00ff);
+        sleep_ms(200);
         st7789_fill(0xffff);
-        sleep_ms(500);
+        sleep_ms(200);
     }
 }

@@ -1,6 +1,6 @@
 # Raspberry Pi Pico – Demo Project
 
-Blinks the built-in LED and print "Screen ahoy (elapsed time)" to the USB tty.
+Blinks the built-in LED and a connected 240x240 ST7789 display, and print "Screen ahoy (elapsed time)" to the USB tty.
 
 ```sh
 make build
